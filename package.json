@@ -23,7 +23,8 @@
     "mocha": "*"
   },
   "dependencies": {
-    "commander": "^2.9.0"
+    "commander": "^2.9.0",
+    "iconv-lite": "^0.4.15"
   },
   "scripts": {
     "build": "cake build",
