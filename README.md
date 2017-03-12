@@ -34,6 +34,8 @@ This class is the main interface for reading data from dBase files. It extends `
 The support options are:
 
 * encoding `String` The character encoding to use (default = `utf-8`)
+* start `Number` 從第N筆資料開始讀取
+* length `Number` 只讀取N筆資料
 
 Creates a new Parser and attaches it to the specified filename.
 

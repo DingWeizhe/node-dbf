@@ -1,6 +1,6 @@
 {
-  "name": "node-dbf",
-  "version": "0.2.1",
+  "name": "node-dbf-iconv",
+  "version": "0.2.2",
   "engines": {
     "node": ">=0.11.0"
   },
