@@ -7,6 +7,8 @@ class Parser extends EventEmitter
 
     constructor: (@filename, @options = {}) ->
         @encoding = @options?.encoding || 'utf-8'
+        @start = @options?.start || 0
+        @length = @options?.length || -1
 
     parse: =>
         @emit 'start', @
@@ -16,15 +18,18 @@ class Parser extends EventEmitter
 
             @emit 'header', @header
 
-            sequenceNumber = 0
+            sequenceNumber = @start
             
-            loc = @header.start
-            bufLoc = @header.start
+            loc = 0
+            bufLoc = 0
             overflow = null
             @paused = false
             
-            stream = fs.createReadStream @filename
-            
+            stream = fs.createReadStream @filename, { start: @header.start + @start * @header.recordLength }
+
+            numberOfRecords = @header.numberOfRecords
+            if @length isnt -1 then numberOfRecords = @length
+
             @readBuf = =>
             
                 if @paused
@@ -32,10 +37,9 @@ class Parser extends EventEmitter
                     return
                 
                 while buffer = stream.read()
-                    if bufLoc isnt @header.start then bufLoc = 0
                     if overflow isnt null then buffer = Buffer.concat([overflow, buffer])
 
-                    while loc < (@header.start + @header.numberOfRecords * @header.recordLength) && (bufLoc + @header.recordLength) <= buffer.length
+                    while loc + bufLoc < (numberOfRecords * @header.recordLength) && (bufLoc + @header.recordLength) <= buffer.length
                         @emit 'record', @parseRecord ++sequenceNumber, buffer.slice bufLoc, bufLoc += @header.recordLength
 
                     loc += bufLoc
