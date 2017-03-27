@@ -44,7 +44,7 @@ class Parser extends EventEmitter
 
                     loc += bufLoc
                     if bufLoc < buffer.length then overflow = buffer.slice bufLoc, buffer.length else overflow = null
-
+                    bufLoc  = 0;
                     return @
                     
             stream.on 'readable',@readBuf            
